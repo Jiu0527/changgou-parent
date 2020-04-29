@@ -2,6 +2,7 @@ package com.changgou.controller;
 
 import com.changgou.goods.pojo.Brand;
 import com.changgou.service.BrandService;
+import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.StatusCode;
 import io.swagger.models.auth.In;
@@ -41,6 +42,16 @@ public class BrandController {
     }
 
     /**
+     * 条件查询
+     * @param brand
+     * @return
+     */
+    @PostMapping("/search")
+    public Result<List<Brand>> findList(@RequestBody Brand brand){
+        List<Brand> brands = brandService.findList(brand);
+        return new Result<List<Brand>>(true,StatusCode.OK,"条件搜索查询成功",brands);
+    }
+    /**
      * 添加品牌信息
      * @param brand
      * @return
@@ -51,6 +62,32 @@ public class BrandController {
         return new Result(true,StatusCode.OK,"增加品牌成功");
     }
 
+    /**
+     * 分页查询
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/search/{page}/{size}")
+    public Result<PageInfo<Brand>> findPage(@PathVariable("page") Integer page,@PathVariable("size") Integer size){
+        PageInfo<Brand> pageInfo = brandService.findPage(page, size);
+        return new Result<PageInfo<Brand>>(true,StatusCode.OK,"分页查询成功",pageInfo);
+    }
+
+    /**
+     * 条件分页查询
+     * @param brand 封装的条件
+     * @param page  页数
+     * @param size  条数
+     * @return
+     */
+    @PostMapping("/search/{page}/{size}")
+    public Result<PageInfo<Brand>> findPage(@RequestBody Brand brand,
+                                            @PathVariable("page") Integer page,
+                                            @PathVariable("size") Integer size){
+        PageInfo<Brand> pageInfo = brandService.findPage(brand, page, size);
+        return new Result<PageInfo<Brand>>(true,StatusCode.OK,"条件分页查询成功",pageInfo);
+    }
     /**
      * 根据id修改商品信息
      * @param id
