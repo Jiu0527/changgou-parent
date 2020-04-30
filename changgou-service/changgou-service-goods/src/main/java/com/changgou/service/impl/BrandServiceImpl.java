@@ -25,6 +25,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public List<Brand> findAll() {
+        int a = 10/0;
         return brandMapper.selectAll();
     }
 
